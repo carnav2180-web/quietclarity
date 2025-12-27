@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiet Clarity – Guided Reflection Paths</title>
+  <style>
+    :root {
+      --bg: #f3f6f5;
+      --primary: #5f7f7a;
+      --secondary: #8fa6a1;
+      --accent: #d6cfc4;
+      --card: #ffffff;
+      --text: #2b2b2b;
+      --muted: #7a8a86;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 980px;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.8rem;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.6rem;
+    }
+
+    header p {
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    .paths, .chapters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+      margin-bottom: 2.8rem;
+    }
+
+    .path-card, .chapter-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 2.2rem;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .path-card:hover, .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 42px rgba(0,0,0,0.08);
+    }
+
+    .path-title {
+      font-size: 1.35rem;
+      margin-bottom: 0.6rem;
+      color: var(--primary);
+    }
+
+    .path-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .map {
+      margin: 2rem 0 3rem;
+      padding: 2rem;
+      background: linear-gradient(180deg, #f6f9f8, #eef3f2);
+      border-radius: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .node {
+      text-align: center;
+      flex: 1;
+      font-size: 0.85rem;
+      color: var(--muted);
+      position: relative;
+    }
+
+    .node::before {
+      content: '';
+      display: block;
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 0.6rem;
+    }
+
+    .node.active::before {
+      background: var(--primary);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 2.6rem;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.06);
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .mentor {
+      font-size: 0.95rem;
+      background: #eef3f2;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      margin-bottom: 1.4rem;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    .intention {
+      font-size: 0.95rem;
+      padding: 1rem 1.2rem;
+      background: #f6f8f7;
+      border-left: 3px solid var(--primary);
+      border-radius: 12px;
+      margin-bottom: 1.4rem;
+      color: #444;
+    }
+
+    .topic {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 0.6rem;
+    }
+
+    .question {
+      font-size: 1.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .explanation {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 1.4rem;
+      line-height: 1.65;
+    }
+
+    .options button {
+      width: 100%;
+      text-align: left;
+      padding: 1.05rem 1.3rem;
+      margin-bottom: 0.9rem;
+      border-radius: 18px;
+      border: 1px solid #e2e2e2;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .options button:hover {
+      background: #eef3f2;
+      border-color: var(--primary);
+    }
+
+    .reflection {
+      margin-top: 1.6rem;
+      padding-left: 0.9rem;
+      border-left: 3px solid var(--accent);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .prompt {
+      margin-top: 0.7rem;
+      font-style: italic;
+      color: #666;
+    }
+
+    .pause {
+      margin-top: 1.6rem;
+      padding: 1.2rem 1.4rem;
+      background: #eef3f2;
+      border-radius: 18px;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 1.2rem;
+      background: var(--accent);
+      padding: 0.55rem 1.2rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    .nav {
+      margin-top: 1.6rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav button {
+      padding: 0.7rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid var(--secondary);
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Quiet Clarity</h1>
+    <p>A companion you return to. Move freely. Pause often. Nothing is rushed.</p>
+  </header>
+
+  <div class="paths" id="paths"></div>
+  <div class="chapters" id="chapters" style="display:none"></div>
+  <div class="map" id="map" style="display:none"></div>
+
+  <div class="card" id="reflectionCard">
+    <div class="mentor" id="mentor"></div>
+    <div class="intention" id="intention"></div>
+    <div class="topic" id="topic"></div>
+    <div class="question" id="question"></div>
+    <div class="explanation" id="explanation"></div>
+    <div class="options" id="options"></div>
+    <div class="reflection" id="reflection"></div>
+    <div class="pause" id="pause"></div>
+    <div class="nav" id="nav"></div>
+  </div>
+
+  <footer>
+    Companion-style reflection. No diagnosis. All progress stays on your device.
+  </footer>
+</div>
+
+<script>
+const STORAGE_KEY = 'quiet_clarity_progress';
+const progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+const data = {
+  self: {
+    title: "Understanding Yourself",
+    desc: "A long, gentle journey into awareness and self-trust.",
+    chapters: [
+      {
+        title: "Noticing",
+        intention: "Today, we simply notice what usually goes unseen.",
+        pause: "Live today with one moment of noticing — without changing it.",
+        steps: [
+          {
+            mentor: "There is nothing to solve here.",
+            topic: "Attention",
+            q: "When something feels off, where does your mind go first?",
+            e: "Attention reveals what the mind learned to protect.",
+            o: [
+              {t:"My mistakes",i:"Responsibility may be deeply familiar.",p:"When did this habit begin?"},
+              {t:"Other people",i:"Context and fairness may matter to you.",p:"What feels unfair right now?"},
+              {t:"I observe",i:"You may have practiced stepping back.",p:"Who taught you this pause?"}
+            ]
+          }
+        ]
+      },
+      {
+        title: "The Body Remembers",
+        intention: "We listen to the body as a quiet storyteller.",
+        pause: "Notice one physical sensation today without naming it.",
+        steps: [
+          {
+            mentor: "The body often speaks first.",
+            topic: "Emotional Weight",
+            q: "How does your body usually feel at night?",
+            e: "What we don’t express often settles in the body.",
+            o: [
+              {t:"Heavy",i:"You may be carrying much alone.",p:"What feels unspoken?"},
+              {t:"Tense",i:"Your system may stay alert.",p:"What would safety feel like?"},
+              {t:"Calm",i:"You may release well.",p:"How do you do that?"}
+            ]
+          }
+        ]
+      },
+      {
+        title: "The Inner Voice",
+        intention: "We meet the voice that speaks when no one else is listening.",
+        pause: "Notice your self-talk once today — gently.",
+        steps: [
+          {
+            mentor: "Every voice has a history.",
+            topic: "Self-Talk",
+            q: "When you fall short, what tone appears inside?",
+            e: "This voice once helped you cope.",
+            o: [
+              {t:"Harsh",i:"Protection once required toughness.",p:"Who spoke this way first?"},
+              {t:"Balanced",i:"You may hold care and clarity together.",p:"When does that shift?"},
+              {t:"Kind",i:"Compassion may be learned.",p:"What allowed this?"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+};
+
+const pathsEl = document.getElementById('paths');
+const chaptersEl = document.getElementById('chapters');
+const mapEl = document.getElementById('map');
+const card = document.getElementById('reflectionCard');
+
+const mentorEl = document.getElementById('mentor');
+const intentionEl = document.getElementById('intention');
+const topicEl = document.getElementById('topic');
+const qEl = document.getElementById('question');
+const eEl = document.getElementById('explanation');
+const oEl = document.getElementById('options');
+const rEl = document.getElementById('reflection');
+const pauseEl = document.getElementById('pause');
+const navEl = document.getElementById('nav');
+
+let currentPathKey, currentChapterIndex, stepIndex, currentSteps;
+
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+function init() {
+  Object.keys(data).forEach(key => {
+    const p = data[key];
+    const div = document.createElement('div');
+    div.className = 'path-card';
+    div.innerHTML = `<div class='path-title'>${p.title}</div><div class='path-desc'>${p.desc}</div>`;
+    div.onclick = () => showChapters(key);
+    pathsEl.appendChild(div);
+  });
+}
+
+function showChapters(key) {
+  currentPathKey = key;
+  pathsEl.style.display = 'none';
+  chaptersEl.style.display = 'grid';
+  mapEl.style.display = 'flex';
+  chaptersEl.innerHTML = '';
+  mapEl.innerHTML = '';
+
+  data[key].chapters.forEach((ch, i) => {
+    const node = document.createElement('div');
+    node.className = 'node' + (progress[`${key}_${i}`] ? ' active' : '');
+    node.textContent = ch.title;
+    mapEl.appendChild(node);
+
+    const div = document.createElement('div');
+    div.className = 'chapter-card';
+    div.innerHTML = `<div class='path-title'>${ch.title}</div><div class='path-desc'>${ch.intention}</div>`;
+    div.onclick = () => startChapter(i);
+    chaptersEl.appendChild(div);
+  });
+}
+
+function startChapter(index) {
+  currentChapterIndex = index;
+  const ch = data[currentPathKey].chapters[index];
+  chaptersEl.style.display = 'none';
+  mapEl.style.display = 'none';
+  card.style.display = 'block';
+
+  intentionEl.textContent = ch.intention;
+  pauseEl.textContent = '';
+
+  currentSteps = ch.steps;
+  stepIndex = 0;
+  loadStep();
+}
+
+function loadStep() {
+  const s = currentSteps[stepIndex];
+  mentorEl.textContent = s.mentor;
+  topicEl.textContent = s.topic;
+  qEl.textContent = s.q;
+  eEl.textContent = s.e;
+  oEl.innerHTML = '';
+  rEl.innerHTML = '';
+  navEl.innerHTML = '';
+
+  s.o.forEach(opt => {
+    const b = document.createElement('button');
+    b.textContent = opt.t;
+    b.onclick = () => choose(opt);
+    oEl.appendChild(b);
+  });
+}
+
+function choose(opt) {
+  rEl.innerHTML = `<div>${opt.i}</div><div class='prompt'>${opt.p}</div>`;
+  setTimeout(() => {
+    stepIndex++;
+    if (stepIndex < currentSteps.length) loadStep();
+    else endChapter();
+  }, 2400);
+}
+
+function endChapter() {
+  const ch = data[currentPathKey].chapters[currentChapterIndex];
+  mentorEl.textContent = 'Let this chapter settle.';
+  topicEl.textContent = 'Between Sessions';
+  qEl.textContent = 'No need to continue right now.';
+  eEl.textContent = 'Insight often arrives later.';
+  oEl.innerHTML = '';
+  pauseEl.textContent = ch.pause;
+
+  progress[`${currentPathKey}_${currentChapterIndex}`] = true;
+  saveProgress();
+
+  navEl.innerHTML = `
+    <button onclick="showChapters(currentPathKey)">Back to chapters</button>
+    <button onclick="startChapter(currentChapterIndex)">Repeat chapter</button>
+    <button onclick="startChapter(Math.min(currentChapterIndex+1, data[currentPathKey].chapters.length-1))">Next chapter</button>
+  `;
+}
+
+init();
+</script>
+</body>
+</html>
