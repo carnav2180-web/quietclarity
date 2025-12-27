@@ -245,6 +245,41 @@
   <header>
     <h1>Quiet Clarity</h1>
     <p>A companion you return to. Move freely. Pause often. Nothing is rushed.</p>
+
+    <section class="hero-intro">
+      <p style="max-width:720px;margin:1.4rem auto 0;font-size:0.95rem;line-height:1.7;color:#555;">
+        Quiet Clarity is not a course or a test. It is a gentle space for reflection,
+        built around paths and chapters you can return to anytime. There is no right pace.
+        Nothing to complete. Only moments to notice.
+      </p>
+    </section>
+
+    <section class="how-it-works" style="margin-top:2.2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
+      <div class="path-card" style="cursor:default;">
+        <div class="path-title">Choose a Path</div>
+        <div class="path-desc">Each path is a long-form journey into one area of life, divided into chapters.</div>
+      </div>
+      <div class="path-card" style="cursor:default;">
+        <div class="path-title">Move in Chapters</div>
+        <div class="path-desc">Chapters are meant to be lived with. You can pause, repeat, or skip freely.</div>
+      </div>
+      <div class="path-card" style="cursor:default;">
+        <div class="path-title">Reflect Gently</div>
+        <div class="path-desc">Questions have no scores. Each response opens reflection, not judgment.</div>
+      </div>
+      <div class="path-card" style="cursor:default;">
+        <div class="path-title">Return Anytime</div>
+        <div class="path-desc">You can come back days or weeks later and continue without losing your place.</div>
+      </div>
+      <div class="path-card" style="cursor:default;">
+        <div class="path-title">Move Non-Linearly</div>
+        <div class="path-desc">There is no fixed order. Repeat chapters, skip ahead, or wander back.</div>
+      </div>
+      <div class="path-card" style="cursor:default;">
+        <div class="path-title">Private by Design</div>
+        <div class="path-desc">Nothing is tracked or sent anywhere. Your reflections stay on your device.</div>
+      </div>
+    </section>
   </header>
 
   <div class="paths" id="paths"></div>
